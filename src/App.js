@@ -16,7 +16,7 @@ function App() {
     loader: true
   })
 
-  const [navdata, setnavdatas] = useState('')
+  const [navdata, setnavdatas] = useState([])
 
   useEffect(() => { 
     if(window.top !== window.self){ 

@@ -4,17 +4,17 @@
   "description": "This is the best app ever",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/Shaku-Med/nobook/main/public/logo.png",
+      "src": "%PUBLIC_URL%/logo.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "https://raw.githubusercontent.com/Shaku-Med/nobook/main/public/logo.png",
+      "src": "%PUBLIC_URL%/logo.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "https://raw.githubusercontent.com/Shaku-Med/nobook/main/public/logo.png",
+      "src": "%PUBLIC_URL%/logo.png",
       "type": "image/png",
       "sizes": "512x512"
     }

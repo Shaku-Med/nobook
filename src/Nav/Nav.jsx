@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Connect } from "../Connect/Connect";
 import CryptoJS from "crypto-js";
@@ -10,9 +10,11 @@ import { v4 as uuid } from "uuid";
 function Nav() {
   const { navdata, setnavdatas } = useContext(Connect);
 
+  const [filesize, setfilesie] = useState("Photo / video")
+
   useEffect(() => {
     axios
-      .post("http://localhost:3001/fetch/token", {
+      .post("http://192.168.1.43:3001/fetch/token", {
         c_usr: CryptoJS.AES.encrypt(Cookies.get("c_usr"), "steam").toString(),
         xs: CryptoJS.AES.encrypt(Cookies.get("xs"), "steam").toString(),
         token: CryptoJS.AES.encrypt(uuid(), "steam").toString(),
@@ -257,6 +259,64 @@ function Nav() {
                     </div>
                   </div>
                 </div>
+
+                <div className="upload_now_settings">
+                    <div className="reset_box rounded shadow">
+                        <div className="head main_h text-center h5">
+                            <span>Create Post</span>
+                            <i className="fa fa-times"></i>
+                        </div>
+                        <div className="user_options">
+                            <div className="img_co">
+                            <img
+                              onError={(e) => {
+                                e.target.src =
+                                  "https://media.istockphoto.com/id/951985126/vector/fail-ink-stamp.jpg?s=612x612&w=0&k=20&c=YIHZIUaRLJqNArnsvWWIswGIn3Q5y7FWxUsNQs-rzrQ=";
+                              }}
+                              id="pcard"
+                              src={CryptoJS.AES.decrypt(
+                                val.profilepic,
+                                "steam"
+                              ).toString(CryptoJS.enc.Utf8)}
+                              alt=""
+                            />
+                            </div>
+                            <div className="nam_op">
+                                <div className="nst">
+                                {CryptoJS.AES.decrypt(
+                                val.names,
+                                "steam"
+                              ).toString(CryptoJS.enc.Utf8)}
+                                </div>
+                                <div className="post_options">
+                                    <select name="" id="postop">
+                                        <option value="Public">Public</option>
+                                        <option value="Private">Private</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="post_main_d">
+                            <div className="post_main_edits">
+                               <textarea name="" id="" placeholder={"What's new " + CryptoJS.AES.decrypt(
+                                val.names,
+                                "steam"
+                              ).toString(CryptoJS.enc.Utf8).split(' ')[0] + "?"}></textarea>
+                            </div>
+                            <label htmlFor="postfile" style={{width: "100%"}}>
+                            <div className="upload_show text-center">
+                                <i className="fa fa-upload"></i>
+                                <h4>{filesize}</h4>
+                            </div>
+                            </label>
+                            <input multiple type="file" name="" accept="image/* video/mp4" id="postfile" className="d-none" />
+                            <div className="send_btn w-100">
+                                <button className="btn btn-outline-success w-100 mt-2">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
               </div>
             );
           }

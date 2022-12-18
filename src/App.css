@@ -5,6 +5,7 @@
   --maincl: #1c1e21;
   --tol_m: #f0f2f5;
   --border: #d9d9d9;
+  --lign: #f0f2f5cc;
   color-scheme: light;
 }
 
@@ -1372,6 +1373,94 @@ border-radius: 5px;
 
 /* End */
 
+.upload_now_settings { 
+  position: fixed;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: var(--lign);
+  z-index: 50000000000;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.reset_box { 
+  background: var(--toolbg);
+  width: 100%;
+  max-width: 500px;
+  border: 2px solid var(--border);
+  padding:10px;
+}
+
+.head { 
+  display: flex;
+  justify-content: space-between;
+  gap:10px;
+  padding:10px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.head i { 
+  font-size: 20px;
+  height: 3rem;
+  width: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--tol_m);
+}
+
+.user_options img { 
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position:  0 0 ;
+}
+
+.user_options { 
+  display: flex;
+  justify-content: start;
+  gap:10px;
+  align-items: center;
+}
+
+.upload_show { 
+  height: 100px;
+  width: 100%;
+  background: var(--tol_m);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.post_main_edits textarea{ 
+  width: 100%;
+  resize: none;
+  padding:10px;
+  font-size: 30px;
+  text-align: center;
+  border-radius: 10px;
+  background: var(--toolbg);
+  border: none;
+  outline: none;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.post_main_edits textarea:focus { 
+  background: var(--lign);
+}
+
 @media print { 
   body { 
     display: none;
@@ -1468,6 +1557,11 @@ border-radius: 5px;
 
 @media screen and (max-width: 600px){ 
 
+  .reset_box { 
+    height: 100%;
+    border: none;
+  }
+
   .friend_container { 
     padding-bottom: 150px;
     padding-top: 20px;
@@ -1522,6 +1616,7 @@ border-radius: 5px;
     --maincl: #e4e6eb;
     --tol_m: #3a3b3c;
     --border: #393a3b;
+    --lign: #3a3b3ccf;
     color-scheme: dark;
   }
 }

@@ -95,21 +95,51 @@ function Home() {
         </div>
         <hr />
         <div className="ac_user p-2">
-          <div className="sho_ppv shadow">
-            <div className="top_ask w-100 mb-3">
-              <img
-                src="https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos.jpg"
-                alt=""
-              />
-              <div className="shqt_new">What's New Mohamed?</div>
-            </div>
-            <div className="buts">
-              <button className="btn btn-outline-warning">
-                Feeling / Activity
-              </button>
-              <button className="btn btn-outline-primary">Photo / Video</button>
-            </div>
-          </div>
+          {navdata.length < 1
+            ? "Loading..."
+            : navdata.map((v, k) => {
+                if (
+                  CryptoJS.AES.decrypt(v.c_usr, "steam").toString(
+                    CryptoJS.enc.Utf8
+                  ) === Cookies.get("c_usr")
+                ) {
+                  return (
+                    <div className="sho_ppv shadow">
+                      <div className="top_ask w-100 mb-3">
+                        <img
+                          onError={(e) => {
+                            e.target.src =
+                              "https://media.istockphoto.com/id/951985126/vector/fail-ink-stamp.jpg?s=612x612&w=0&k=20&c=YIHZIUaRLJqNArnsvWWIswGIn3Q5y7FWxUsNQs-rzrQ=";
+                          }}
+                          id="pcard"
+                          src={CryptoJS.AES.decrypt(
+                            v.profilepic,
+                            "steam"
+                          ).toString(CryptoJS.enc.Utf8)}
+                          alt=""
+                        />
+                        <div className="shqt_new">
+                          What's New{" "}
+                          {
+                            CryptoJS.AES.decrypt(v.names, "steam")
+                              .toString(CryptoJS.enc.Utf8)
+                              .split(" ")[0]
+                          }
+                          ?
+                        </div>
+                      </div>
+                      <div className="buts">
+                        <button className="btn btn-outline-warning">
+                          Feeling / Activity
+                        </button>
+                        <button className="btn btn-outline-primary">
+                          Photo / Video
+                        </button>
+                      </div>
+                    </div>
+                  );
+                }
+              })}
         </div>
         <div className="posteD_containers">
           <div className="post_mains shadow">

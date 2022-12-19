@@ -1082,7 +1082,7 @@ border-radius: 5px;
 
 .sgory_main:hover #scme{ 
   opacity: 0.9;
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 
 .us_own { 
@@ -1422,6 +1422,7 @@ border-radius: 5px;
   border-radius: 50%;
   object-fit: cover;
   object-position:  0 0 ;
+  pointer-events: none;
 }
 
 .user_options { 
@@ -1459,6 +1460,17 @@ border-radius: 5px;
 
 .post_main_edits textarea:focus { 
   background: var(--lign);
+}
+
+.upload_now_settings { 
+  visibility: hidden;
+  opacity: 0;
+  transition: .3s ease-in-out;
+}
+
+.upload_now_settings.sh_upl { 
+  visibility: visible;
+  opacity: 1;
 }
 
 @media print { 
@@ -1560,6 +1572,7 @@ border-radius: 5px;
   .reset_box { 
     height: 100%;
     border: none;
+    max-width: 100%;
   }
 
   .friend_container { 
@@ -1604,7 +1617,7 @@ border-radius: 5px;
   }
 
   .drop_downs { 
-    right: -140px;
+    right: -100px;
     max-width: 300px;
   }
 }

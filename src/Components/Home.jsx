@@ -104,7 +104,7 @@ function Home() {
                   ) === Cookies.get("c_usr")
                 ) {
                   return (
-                    <div className="sho_ppv shadow">
+                    <div key={k} className="sho_ppv shadow">
                       <div className="top_ask w-100 mb-3">
                         <img
                           onError={(e) => {

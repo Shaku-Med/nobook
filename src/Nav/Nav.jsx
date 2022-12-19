@@ -12,6 +12,8 @@ function Nav() {
 
   const [filesize, setfilesie] = useState("Photo / video")
 
+  const [filesmain, setfilesmain] = useState([])
+
   useEffect(() => {
     axios
       .post("http://192.168.1.43:3001/fetch/token", {
@@ -56,6 +58,89 @@ function Nav() {
       }
     }, 10);
   }, []);
+
+  const [posttext, setposttext] = useState('')
+  const [privacy, setpostprivacy] = useState('Public')
+
+
+  const [btns, setbtns] = useState(
+    { 
+        main: true,
+        desc: "Please wait..."
+    }
+)
+
+  const handlesubmit = e => { 
+    e.preventDefault()
+
+    if(posttext !== '' && filesmain.length < 1){ 
+        setbtns({ 
+            main: false,
+            desc: "Please wait..."
+        })
+
+        axios.post("http://192.168.1.43:3001/post/text/token", { 
+            c_usr: CryptoJS.AES.encrypt(Cookies.get("c_usr"), 'steam').toString(),
+            xs: CryptoJS.AES.encrypt(Cookies.get("xs"), 'steam').toString(),
+            token: CryptoJS.AES.encrypt(uuid(), 'steam').toString()
+        }).then(res => { 
+            console.log(res.data)
+            axios.post("http://192.168.1.43:3001/post/text", { 
+                c_usr: CryptoJS.AES.encrypt(Cookies.get("c_usr"), 'steam').toString(),
+                posttext: CryptoJS.AES.encrypt(posttext, 'steam').toString(), 
+                filetype: CryptoJS.AES.encrypt("Text", 'steam').toString(), 
+                generalid: CryptoJS.AES.encrypt(uuid(), 'steam').toString(), 
+                singleid: CryptoJS.AES.encrypt(uuid(), 'steam').toString(), 
+                ourg: CryptoJS.AES.encrypt(res.data, 'steam').toString(), 
+                filesmain: '',
+            }).then(r => { 
+                console.log(r.data)
+            })
+        })
+    }
+    else if(posttext === '' && filesmain.length >= 1){ 
+      for(var i of filesmain){ 
+        alert(i.type)
+        if(i.type === 'video/mp4' || i.type === "video/quicktime"){ 
+            alert("Uploading video vile")
+
+            setbtns({ 
+                main: false,
+                desc: "Please wait..."
+            })
+        }
+        else if(i.type === 'image/jpeg' || i.type === 'image/jpg' || i.type === 'image/png' || i.type === 'image/wav'){ 
+            alert("Image uploading")
+
+            setbtns({ 
+                main: false,
+                desc: "Please wait..."
+            })
+        }
+        else { 
+            alert("Invalid File")
+        }
+      }
+    }
+    else if(posttext !== '' && filesmain.length >= 1){ 
+        for(var i of filesmain){ 
+            alert(i.type)
+            if(i.type === 'video/mp4' || i.type === "video/quicktime"){ 
+                alert("Uploading video vile")
+            }
+            else if(i.type === 'image/jpeg' || i.type === 'image/jpg' || i.type === 'image/png' || i.type === 'image/wav'){ 
+                alert("Image uploading")
+            }
+            else { 
+                alert("Invalid File")
+            }
+          }
+    }
+    else { 
+        alert("Please Choose a file or write something.")
+    }
+
+  }
 
   return (
     <>
@@ -137,7 +222,10 @@ function Nav() {
                         <div id="our_drops" className="what_posts">
                           <div className="cr_1 rounded">
                             <i className="fa fa-edit"></i>
-                            <div className="ed_s">
+                            <div onClick={e => { 
+                                let upload_now_settings = document.querySelector(".upload_now_settings")
+                                upload_now_settings.classList.add("sh_upl")
+                            }} className="ed_s">
                               <div className="eh">Post</div>
                               <small>Share a post on News Feed.</small>
                             </div>
@@ -250,7 +338,15 @@ function Nav() {
                           </div>
                         </div>
                         <div className="cad_ses w-100">
-                          <div className="c_a_1">
+                          <div onClick={e => { 
+                            if(window.confirm("Do you wish to log out?") === true){ 
+                                console.clear();
+                                localStorage.clear();
+                                Cookies.remove("c_usr");
+                                Cookies.remove("xs");
+                                window.location.reload();
+                            }
+                          }} className="c_a_1">
                             <i className="fa fa-door-open"></i>
                             <span>Log Out</span>
                           </div>
@@ -264,7 +360,10 @@ function Nav() {
                     <div className="reset_box rounded shadow">
                         <div className="head main_h text-center h5">
                             <span>Create Post</span>
-                            <i className="fa fa-times"></i>
+                            <i onClick={e => { 
+                                let upload_now_settings = document.querySelector(".upload_now_settings")
+                                upload_now_settings.classList.remove("sh_upl")
+                            }} className="fa fa-times"></i>
                         </div>
                         <div className="user_options">
                             <div className="img_co">
@@ -289,7 +388,9 @@ function Nav() {
                               ).toString(CryptoJS.enc.Utf8)}
                                 </div>
                                 <div className="post_options">
-                                    <select name="" id="postop">
+                                    <select onChange={e => { 
+                                setpostprivacy(e.target.value)
+                               }} name="" id="postop">
                                         <option value="Public">Public</option>
                                         <option value="Private">Private</option>
                                     </select>
@@ -297,22 +398,78 @@ function Nav() {
                             </div>
                         </div>
                         <div className="post_main_d">
-                            <div className="post_main_edits">
-                               <textarea name="" id="" placeholder={"What's new " + CryptoJS.AES.decrypt(
-                                val.names,
-                                "steam"
-                              ).toString(CryptoJS.enc.Utf8).split(' ')[0] + "?"}></textarea>
-                            </div>
-                            <label htmlFor="postfile" style={{width: "100%"}}>
-                            <div className="upload_show text-center">
-                                <i className="fa fa-upload"></i>
-                                <h4>{filesize}</h4>
-                            </div>
-                            </label>
-                            <input multiple type="file" name="" accept="image/* video/mp4" id="postfile" className="d-none" />
-                            <div className="send_btn w-100">
-                                <button className="btn btn-outline-success w-100 mt-2">Post</button>
-                            </div>
+
+                            { 
+                               [btns].map((m, h) => { 
+                                  if(m.main === true){ 
+                                    return ( 
+                                        <form key={h} onSubmit={handlesubmit} action="">
+                                        <div className="post_main_edits">
+                                            <textarea onChange={e => { 
+                                             setposttext(e.target.value)
+                                            }} name="" id="" placeholder={"What's new " + CryptoJS.AES.decrypt(
+                                             val.names,
+                                             "steam"
+                                           ).toString(CryptoJS.enc.Utf8).split(' ')[0] + "?"}></textarea>
+                                         </div>
+                                         <label htmlFor="postfile" style={{width: "100%"}}>
+                                         <div className="upload_show text-center">
+                                             <i className="fa fa-upload"></i>
+                                             <h5 className="mt-2">{filesize}</h5>
+                                         </div>
+                                         </label>
+                                         <input onChange={e => { 
+                                             if(e.target.files.length > 4){ 
+                                                 setfilesie("Woa 😮. 4 File is the limit")
+                                             }
+                                             else { 
+                                                 setfilesmain(e.target.files)
+                                                 setfilesie("Good file Length: " + e.target.files.length)
+                                             }
+                                         }} multiple type="file" name="" accept="image/* video/mp4 video/quicktime" id="postfile" className="d-none" />
+                                         <div className="send_btn w-100">
+                                             <button className="btn btn-outline-success w-100 mt-2">Post</button>
+                                         </div>
+                                        </form>
+                                    )
+                                  }
+                                  else { 
+                                   return ( 
+                                    <form key={h} onSubmit={e => {
+                                        e.preventDefault() 
+                                        alert("File under processing... Please wait...")
+                                    }} action="">
+                                    <div className="post_main_edits">
+                                        <textarea onChange={e => { 
+                                         setposttext(e.target.value)
+                                        }} name="" id="" placeholder={"What's new " + CryptoJS.AES.decrypt(
+                                         val.names,
+                                         "steam"
+                                       ).toString(CryptoJS.enc.Utf8).split(' ')[0] + "?"}></textarea>
+                                     </div>
+                                     <label htmlFor="postfile" style={{width: "100%"}}>
+                                     <div className="upload_show text-center">
+                                         <i className="fa fa-upload"></i>
+                                         <h5 className="mt-2">{filesize}</h5>
+                                     </div>
+                                     </label>
+                                     <input onChange={e => { 
+                                         if(e.target.files.length > 4){ 
+                                             setfilesie("Woa 😮. 4 File is the limit")
+                                         }
+                                         else { 
+                                             setfilesmain(e.target.files)
+                                             setfilesie("Good file Length: " + e.target.files.length)
+                                         }
+                                     }} multiple type="file" name="" accept="image/* video/mp4 video/quicktime" id="postfile" className="d-none" />
+                                     <div className="send_btn w-100">
+                                         <button className="btn btn-outline-success w-100 mt-2">{m.desc}</button>
+                                     </div>
+                                    </form>
+                                   )
+                                  }
+                               })
+                            }
                         </div>
                     </div>
                 </div>
